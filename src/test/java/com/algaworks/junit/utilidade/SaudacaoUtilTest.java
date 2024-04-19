@@ -10,4 +10,14 @@ public class SaudacaoUtilTest {
     String saudacao = SaudacaoUtil.saudar(9);
     assertEquals("Bom dia", saudacao);
   }
+
+  @Test
+  public void deveLancarException(){
+    assertThrows(IllegalArgumentException.class, () -> SaudacaoUtil.saudar(-10));
+  }
+
+  @Test
+  public void naoDeveLancarException(){
+    assertDoesNotThrow(() -> SaudacaoUtil.saudar(0));
+  }
 }
