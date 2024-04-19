@@ -19,7 +19,7 @@ public class SaudacaoUtilTest {
 
   @Test
   public void deveSaudarBoaNoiteTest(){
-    String saudacao = SaudacaoUtil.saudar(21);
+    String saudacao = SaudacaoUtil.saudar(3);
     assertEquals("Boa noite", saudacao);
   }
   @Test
