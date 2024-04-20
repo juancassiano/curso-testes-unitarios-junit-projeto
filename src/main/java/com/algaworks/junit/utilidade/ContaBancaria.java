@@ -16,8 +16,8 @@ public class ContaBancaria {
         //TODO 1 - validar valor: não pode ser nulo, zero ou menor que zero, caso seja, deve lançar uma IllegalArgumentException
         //TODO 2 - Deve subtrair o valor do saldo
         //TODO 3 - Se o saldo for insuficiente deve lançar uma RuntimeException
-        if(this.saldo.compareTo(valor) < 0) throw new RuntimeException();
         if(valor == null || valor.compareTo(BigDecimal.ZERO) <= 0) throw new IllegalArgumentException();
+        if(this.saldo.compareTo(valor) < 0) throw new RuntimeException();
         this.saldo = this.saldo.subtract(valor);
     }
 
