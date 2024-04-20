@@ -1,23 +1,29 @@
 package com.algaworks.junit.utilidade;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+@DisplayName("Testes no utilitário Saudação")
 public class SaudacaoUtilTest {
 
   @Test
+  @DisplayName("Deve saudar com bom dia de 5 as 11")
   public void deveSaudarBomdiaTest(){
     String saudacao = SaudacaoUtil.saudar(9);
     assertEquals("Bom dia", saudacao);
   }
 
   @Test
+  @DisplayName("Deve saudar com boa tarde de 12 as 17")
   public void deveSaudarBoaTardeTest(){
     String saudacao = SaudacaoUtil.saudar(16);
     assertEquals("Boa tarde", saudacao);
   }
 
   @Test
+  @DisplayName("Deve saudar com boa tarde de 18 as 4")
   public void deveSaudarBoaNoiteTest(){
     String saudacao = SaudacaoUtil.saudar(3);
     assertEquals("Boa noite", saudacao);
