@@ -13,11 +13,20 @@ import org.junit.jupiter.api.Test;
 public class FiltroNumerosTest {
 
   @Test
-  public void deve_Retornar_Numeros_Pares(){
+  public void given_lista_de_numeros_when_filtrar_por_pares_Then_deve_retornar_apenas_numeros_pares(){
     List<Integer> numeros = Arrays.asList(1,2,3,4);
     List<Integer> numerosParesEsperados = Arrays.asList(2,4);
     List<Integer> resultado = FiltroNumeros.numerosPares(numeros);
 
     assertIterableEquals(numerosParesEsperados, resultado);
+  }
+
+  @Test
+  public void given_lista_de_numeros_when_filtrar_por_impares_Then_deve_retornar_apenas_numeros_impares(){
+    List<Integer> numeros = Arrays.asList(1,2,3,4);
+    List<Integer> numerosImparesEsperados = Arrays.asList(1,3);
+    List<Integer> resultado = FiltroNumeros.numerosImpares(numeros);
+
+    assertIterableEquals(numerosImparesEsperados, resultado);
   }
 }
