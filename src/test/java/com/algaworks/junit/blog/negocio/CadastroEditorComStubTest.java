@@ -17,7 +17,7 @@ import com.algaworks.junit.blog.exception.RegraNegocioException;
 import com.algaworks.junit.blog.modelo.Editor;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-public class CadastroEditorTest {
+public class CadastroEditorComStubTest {
 
   CadastroEditor cadastroEditor;
   ArmazenamentoEditorFixoEmMemoria armazenamentoEditor;
