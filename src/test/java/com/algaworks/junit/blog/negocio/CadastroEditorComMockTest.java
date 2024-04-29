@@ -1,6 +1,7 @@
 package com.algaworks.junit.blog.negocio;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.atLeastOnce;
 
 import java.math.BigDecimal;
 
@@ -43,8 +44,16 @@ public class CadastroEditorComMockTest {
   }
 
   @Test
-  public void data_um_editor_valido_Quando_criar_Entao_deve_retornar_um_id_de_cadastro(){
+  public void dado_um_editor_valido_Quando_criar_Entao_deve_retornar_um_id_de_cadastro(){
     Editor editorSalvo = cadastroEditor.criar(editor);
     assertEquals(1L, editorSalvo.getId());
+  }
+
+  @Test
+  public void dado_um_editor_valido_Quando_criar_Entao_deve_chamar_metodo_salvar_do_armazenamento(){
+    cadastroEditor.criar(editor);
+    Mockito.verify(armazenamentoEditor, atLeastOnce()).salvar(Mockito.eq(editor));
+    // Mockito.verify(armazenamentoEditor, atLeastOnce()).salvar(Mockito.any(Mockito.any(Editor.class)));
+
   }
 }
