@@ -19,8 +19,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.Optional;
 
 import com.algaworks.junit.blog.armazenamento.ArmazenamentoEditor;
+import com.algaworks.junit.blog.exception.RegraNegocioException;
 import com.algaworks.junit.blog.modelo.Editor;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -90,5 +92,17 @@ public class CadastroEditorComMockTest {
     // Editor editorSpy = Mockito.spy(editor);
     cadastroEditor.criar(editor);
     Mockito.verify(editor, Mockito.atLeastOnce()).getEmail();
+  }
+
+  @Test
+  void dado_um_editor_com_email_existente_Quando_cadastrar_Entao_deve_lancar_exception(){
+    Mockito.when(armazenamentoEditor.encontrarPorEmail("juan@email.com"))
+      .thenReturn(Optional.empty())
+      .thenReturn(Optional.of(editor));
+
+      Editor editorComEmailExistente = new Editor(null, "Juan", "juan@email.com", BigDecimal.TEN, true);
+
+      cadastroEditor.criar(editor);
+      assertThrows(RegraNegocioException.class, () -> cadastroEditor.criar(editorComEmailExistente));
   }
 }
