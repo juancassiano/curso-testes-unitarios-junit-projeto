@@ -12,6 +12,8 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -25,6 +27,9 @@ import com.algaworks.junit.blog.modelo.Editor;
 public class CadastroEditorComMockTest {
 
   Editor editor;
+
+  @Captor
+  ArgumentCaptor<Mensagem> mensagemArgumentCaptor;
 
   @Mock
   ArmazenamentoEditor armazenamentoEditor;
@@ -59,11 +64,26 @@ public class CadastroEditorComMockTest {
   }
 
   @Test
-  void dado_um_editor_alido_Quando_criar_e_lancar_exception_ao_salvar_Entao_nao_deve_criar_email(){
+  void dado_um_editor_valido_Quando_criar_e_lancar_exception_ao_salvar_Entao_nao_deve_criar_email(){
     when(armazenamentoEditor.salvar(editor)).thenThrow(new RuntimeException());
     assertAll("Não deve enviar email quando lançar exception do armazenamento", 
       () -> assertThrows(RuntimeException.class, () -> cadastroEditor.criar(editor)),
       () -> verify(gerenciadorEnvioEmail, never()).enviarEmail(any())
     );
   }
+
+  @Test
+  void dado_um_ediro_valido_Quando_cadastrar_Entao_deve_enviar_email_com_desitno_ao_editor(){
+    // ArgumentCaptor<Mensagem> mensagemArgumentCaptor = ArgumentCaptor.forClass(Mensagem.class);
+
+    Editor editorSalvo = cadastroEditor.criar(editor);
+
+    Mockito.verify(gerenciadorEnvioEmail).enviarEmail(mensagemArgumentCaptor.capture());
+
+    Mensagem mensagem = mensagemArgumentCaptor.getValue();
+
+    assertEquals(editorSalvo.getEmail(), mensagem.getDestinatario());
+
+  }
+
 }
