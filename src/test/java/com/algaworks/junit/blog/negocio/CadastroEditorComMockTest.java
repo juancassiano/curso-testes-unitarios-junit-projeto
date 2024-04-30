@@ -1,7 +1,9 @@
 package com.algaworks.junit.blog.negocio;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.atLeastOnce;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 
@@ -50,10 +52,18 @@ public class CadastroEditorComMockTest {
   }
 
   @Test
-  public void dado_um_editor_valido_Quando_criar_Entao_deve_chamar_metodo_salvar_do_armazenamento(){
+  void dado_um_editor_valido_Quando_criar_Entao_deve_chamar_metodo_salvar_do_armazenamento(){
     cadastroEditor.criar(editor);
     Mockito.verify(armazenamentoEditor, atLeastOnce()).salvar(Mockito.eq(editor));
     // Mockito.verify(armazenamentoEditor, atLeastOnce()).salvar(Mockito.any(Mockito.any(Editor.class)));
+  }
 
+  @Test
+  void dado_um_editor_alido_Quando_criar_e_lancar_exception_ao_salvar_Entao_nao_deve_criar_email(){
+    when(armazenamentoEditor.salvar(editor)).thenThrow(new RuntimeException());
+    assertAll("Não deve enviar email quando lançar exception do armazenamento", 
+      () -> assertThrows(RuntimeException.class, () -> cadastroEditor.criar(editor)),
+      () -> verify(gerenciadorEnvioEmail, never()).enviarEmail(any())
+    );
   }
 }
