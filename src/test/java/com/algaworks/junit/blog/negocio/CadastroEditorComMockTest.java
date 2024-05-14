@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -104,5 +105,14 @@ public class CadastroEditorComMockTest {
 
       cadastroEditor.criar(editor);
       assertThrows(RegraNegocioException.class, () -> cadastroEditor.criar(editorComEmailExistente));
+  }
+
+  @Test
+  void dado_um_editor_valido_Quando_cadastrar_Entao_deve_enviar_email_apos_salvar(){
+    cadastroEditor.criar(editor);
+
+    InOrder inOrder = Mockito.inOrder(armazenamentoEditor,gerenciadorEnvioEmail);
+    inOrder.verify(armazenamentoEditor,Mockito.times(1)).salvar(editor);
+    inOrder.verify(gerenciadorEnvioEmail,Mockito.times(1)).enviarEmail(Mockito.any(Mensagem.class));
   }
 }
