@@ -3,6 +3,7 @@ package com.algaworks.junit.blog.negocio;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
@@ -24,15 +25,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import com.algaworks.junit.blog.armazenamento.ArmazenamentoEditor;
+import com.algaworks.junit.blog.exception.EditorNaoEncontradoException;
 import com.algaworks.junit.blog.exception.RegraNegocioException;
 import com.algaworks.junit.blog.modelo.Editor;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @ExtendWith(MockitoExtension.class)
 public class CadastroEditorComMockTest {
-
-  @Spy
-  Editor editor = new Editor(null, "Juan", "juan@email.com", BigDecimal.TEN, true);
 
   @Captor
   ArgumentCaptor<Mensagem> mensagemArgumentCaptor;
@@ -48,6 +47,10 @@ public class CadastroEditorComMockTest {
 
   @Nested
   class CadastroComEditorValido{
+    
+    @Spy
+    Editor editor = new Editor(null, "Juan", "juan@email.com", BigDecimal.TEN, true);
+
     @BeforeEach
     void init(){
       Mockito.when(armazenamentoEditor.salvar(Mockito.any(Editor.class))).thenAnswer(invocacao -> {
@@ -129,6 +132,50 @@ public class CadastroEditorComMockTest {
       assertThrows(NullPointerException.class,  () -> cadastroEditor.criar(null));
       Mockito.verify(armazenamentoEditor, Mockito.never()).salvar(Mockito.any());
       Mockito.verify(gerenciadorEnvioEmail, Mockito.never()).enviarEmail(Mockito.any());
+    }
+  }
+
+  @Nested
+  class EdicaoComEditorValido{
+
+    @Spy
+    Editor editor = new Editor(1L, "Juan", "juan@email.com", BigDecimal.TEN, true);
+
+    @BeforeEach
+    void init(){
+      Mockito.when(armazenamentoEditor.salvar(editor)).thenAnswer(invocation ->invocation.getArgument(0, Editor.class));
+      Mockito.when(armazenamentoEditor.encontrarPorId(1L)).thenReturn(Optional.of(editor));
+    }
+
+    @Test
+    void dado_um_editor_valido_Quando_editar_Entao_deve_alterar_editor_salvo(){
+      Editor editorAtualizado = new Editor(1L, "Cassiano", "cassiano@email.com", BigDecimal.ZERO, false);
+
+      cadastroEditor.editar(editorAtualizado);
+      Mockito.verify(editor, Mockito.times(1)).atualizarComDados(editorAtualizado);
+
+      InOrder inOrder = Mockito.inOrder(editor, armazenamentoEditor);
+      inOrder.verify(editor).atualizarComDados(editorAtualizado);
+      inOrder.verify(armazenamentoEditor).salvar(editor);
+
+    }
+
+  }
+
+  @Nested
+  class EdicaoComEditorInexistente{
+    Editor editor = new Editor(99L, "Juan", "juan@email.com", BigDecimal.TEN, true);
+
+    @BeforeEach
+    void init(){
+      Mockito.when(armazenamentoEditor.encontrarPorId(99L)).thenReturn(Optional.empty());
+    }
+
+    @Test
+    void dado_um_editor_que_nao_exista_Quando_editar_Entao_deve_lancar_exception(){
+      assertThrows(EditorNaoEncontradoException.class, () -> cadastroEditor.editar(editor));
+
+      Mockito.verify(armazenamentoEditor, never()).salvar(Mockito.any());
     }
   }
 }
