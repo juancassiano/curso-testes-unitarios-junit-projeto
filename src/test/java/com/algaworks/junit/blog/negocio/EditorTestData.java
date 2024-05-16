@@ -7,16 +7,16 @@ import com.algaworks.junit.blog.modelo.Editor;
 public class EditorTestData {
   private EditorTestData(){}
 
-  public static Editor umEditorNovo(){
-    return new Editor(null, "Juan", "juan@email.com", BigDecimal.TEN, true);
+  public static Editor.Builder umEditorNovo(){
+    return Editor.builder().nome("Juan").email("juan@email.com").valorPagoPorPalavra(BigDecimal.TEN).premium(true);
   }
 
-  public static Editor umEditorExistente(){
-    return new Editor(1L, "Juan", "juan@email.com", BigDecimal.TEN, true);
+  public static Editor.Builder umEditorExistente(){
+    return umEditorNovo().id(1L);
   }
 
-  public static Editor umEditorComIdInexistente(){
-    return new Editor(99L, "Juan", "juan@email.com", BigDecimal.TEN, true);
+  public static Editor.Builder umEditorComIdInexistente(){
+    return umEditorNovo().id(99L);
   }
   
 }
