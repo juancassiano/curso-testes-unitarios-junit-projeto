@@ -45,12 +45,12 @@ public class CadastroPostTest {
   ArgumentCaptor<Notificacao> notifiArgumentCaptor;
 
   @Spy
-  Editor editor =  new Editor(1L, "Juan", "juan@email.com", BigDecimal.TEN, true);
+  Editor editor =  EditorTestData.umEditorNovo().build();
 
   @Nested
   class Cadastro{
     @Spy
-    Post post = new Post("Olá Mundo", "Olá mundo com sout", editor, true, true);
+    Post post = PostTestData.umPostNovo().build();
     
     @Test
     void dado_um_post_valido_Quando_cadastrar_Entao_deve_salvar(){
@@ -171,8 +171,8 @@ public class CadastroPostTest {
   class Edicao{
     
     @Spy
-    Post post = new Post(1L, "Olá mundo Java", "Olá Java com sout", editor, "ola-mundo-java", new Ganhos(BigDecimal.TEN, 4, BigDecimal.valueOf(10)), true, true);
-  
+    Post post = PostTestData.umPostExistente().build();
+    
     @Test
     void dado_um_post_valido_Quando_editar_Entao_deve_salvar(){
       Mockito.when(armazenamentoPost.salvar(Mockito.any(Post.class)))
@@ -213,6 +213,7 @@ public class CadastroPostTest {
 
     @Test
     void dado_um_post_nao_pago_Quando_editar_Entao_deve_retornar_recalcular_ganhos_antes_de_salvar() {
+  
       post.setConteudo("Conteúdo editado");
       post.setPago(false);
       Ganhos novoGanho = new Ganhos(BigDecimal.TEN, 2, BigDecimal.valueOf(20));
@@ -251,8 +252,8 @@ public class CadastroPostTest {
 
     @Test
     void dado_um_post_valido_Quando_editar_Entao_deve_deve_alterar_post_salvo() {
-        Post postAlterado = new Post(1L, "Olá Java", "Olá Java", editor, "ola-mundo-java", new Ganhos(BigDecimal.TEN, 4, BigDecimal.valueOf(10)), true, true);
-
+        Post postAlterado = PostTestData.umPostExistente().build();
+        
         Mockito.when(armazenamentoPost.salvar(Mockito.any(Post.class)))
                 .then(invocacao -> invocacao.getArgument(0, Post.class));
         Mockito.when(armazenamentoPost.encontrarPorId(1L)).thenReturn(Optional.ofNullable(post));
