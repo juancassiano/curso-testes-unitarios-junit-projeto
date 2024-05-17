@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public class SaudacaoUtilTest {
@@ -38,5 +40,12 @@ public class SaudacaoUtilTest {
   @Test
   public void naoDeveLancarException(){
     assertDoesNotThrow(() -> SaudacaoUtil.saudar(0));
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = {5, 6, 7, 8, 9, 10, 11})
+  public void dado_horario_matinal_Quando_saudar_Entao_deve_retornar_bom_dia(int hora){
+    String saudacao = SaudacaoUtil.saudar(hora);
+    assertEquals("Bom dia", saudacao);
   }
 }
