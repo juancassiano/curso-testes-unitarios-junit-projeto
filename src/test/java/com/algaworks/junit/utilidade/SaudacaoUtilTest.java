@@ -2,6 +2,7 @@ package com.algaworks.junit.utilidade;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -16,7 +17,10 @@ public class SaudacaoUtilTest {
   @DisplayName("Deve saudar com bom dia de 5 as 11")
   public void deveSaudarBomdiaTest(){
     String saudacao = SaudacaoUtil.saudar(9);
-    assertEquals("Bom dia", saudacao);
+    // assertEquals("Bom dia", saudacao); Junit
+
+    //AssertJ
+    Assertions.assertThat(saudacao).isEqualTo("Bom dia");
   }
 
   @Test
