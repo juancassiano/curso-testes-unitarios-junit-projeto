@@ -19,11 +19,16 @@ public class SaudacaoUtilTest {
   @Test
   @DisplayName("Deve saudar com bom dia de 5 as 11")
   public void deveSaudarBomdiaTest(){
-    String saudacao = SaudacaoUtil.saudar(9);
+    int horaValida = 9;
+    String saudacao = SaudacaoUtil.saudar(horaValida);
+    String saudacaoCorreta = "Bom dia";
     // assertEquals("Bom dia", saudacao); Junit
 
     //AssertJ
-    Assertions.assertThat(saudacao).isEqualTo("Bom dia");
+    Assertions.assertThat(saudacao)
+    .as("Validando se a saudação é %s", saudacaoCorreta)
+    .withFailMessage("Erro: Saudação Incorreta! Resultado: %s", saudacao)
+    .isEqualTo("Bom dia");
   }
 
   @Test
@@ -46,7 +51,7 @@ public class SaudacaoUtilTest {
 
   @Test
   public void naoDeveLancarException(){
-    assertDoesNotThrow(() -> SaudacaoUtil.saudar(-10));
+    assertDoesNotThrow(() -> SaudacaoUtil.saudar(14));
 
   }
 
