@@ -3,6 +3,7 @@ package com.algaworks.junit.utilidade;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -26,9 +27,10 @@ public class SaudacaoUtilTest {
 
     //AssertJ
     Assertions.assertThat(saudacao)
-    .as("Validando se a saudação é %s", saudacaoCorreta)
-    .withFailMessage("Erro: Saudação Incorreta! Resultado: %s", saudacao)
-    .isEqualTo("Bom dia");
+    // .as("Validando se a saudação é %s", saudacaoCorreta)
+    // .withFailMessage("Erro: Saudação Incorreta! Resultado: %s", saudacao)
+    // .isEqualTo("Bom dia");
+      .is(SaudacaoUtilConditions.igualBomDia());
   }
 
   @Test
